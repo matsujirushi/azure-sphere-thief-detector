@@ -55,12 +55,7 @@ void vApplicationMallocFailedHook()
 ////////////////////////////////////////////////////////////////////////////////
 // Main
 
-extern "C"
-{
-_Noreturn void RTCoreMain();
-}
-
-_Noreturn void RTCoreMain()
+_Noreturn void CcMain(void)
 {
 	NVIC_SetupVectorTable();
 	SemihostingInit();

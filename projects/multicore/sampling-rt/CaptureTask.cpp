@@ -10,9 +10,9 @@
 #include "DigitalOut.h"
 
 static constexpr int MIC = ADC_CHANNEL_1;
-static AnalogIn* Mic;
+static AnalogIn Mic{ MIC };
 
-static Ticker* CaptureTicker;
+static Ticker CaptureTicker{ GPT3 };
 SemaphoreHandle_t CaptureSemaphore;
 QueueHandle_t AdcDataWriteQueue = nullptr;
 QueueHandle_t AdcDataReadQueue = nullptr;
@@ -23,7 +23,7 @@ static int AdcDataCount = 0;
 
 static void CaptureTickerHandler(void* cb_data)
 {
-	CaptureTicker->Restart();
+	CaptureTicker.Restart();
 
 	BaseType_t higher_priority_task_woken = pdFALSE;
 	xSemaphoreGiveFromISR(CaptureSemaphore, &higher_priority_task_woken);
@@ -33,9 +33,6 @@ static void CaptureTickerHandler(void* cb_data)
 void CaptureTask(void* params)
 {
 	printf("Capture Task Started.\n");
-
-	static AnalogIn mic{ MIC };
-	Mic = &mic;
 
 	CaptureSemaphore = xSemaphoreCreateBinary();
 	if (CaptureSemaphore == nullptr) abort();
@@ -50,9 +47,7 @@ void CaptureTask(void* params)
 	printf("AdcData[1] = %#010lx\n", (unsigned long)AdcDataPtr);
 	if (xQueueSendToBack(AdcDataWriteQueue, &AdcDataPtr, 0) != pdPASS) abort();
 
-	static Ticker captureTicker{ GPT3 };
-	CaptureTicker = &captureTicker;
-	CaptureTicker->Attach(CaptureTickerHandler, 1.0 / 4000);	// 1[sec.] / 4000 = 250[usec.]
+	CaptureTicker.Attach(CaptureTickerHandler, 1.0 / 4000);	// 1[sec.] / 4000 = 250[usec.]
 
 	if (xQueueReceive(AdcDataWriteQueue, &AdcDataPtr, 0) != pdPASS) abort();
 	while (true)
@@ -62,7 +57,7 @@ void CaptureTask(void* params)
 		static DigitalOut debugCapturing{ DEBUG_PIN_CAPTURING };
 		debugCapturing.Write(1);
 
-		AdcDataPtr[AdcDataCount] = Mic->Read();
+		AdcDataPtr[AdcDataCount] = Mic.Read();
 		++AdcDataCount;
 		if (AdcDataCount >= ADC_DATA_NUMBER)
 		{
