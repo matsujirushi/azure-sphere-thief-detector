@@ -10,7 +10,6 @@ private:
 
 public:
 	DigitalOut(int pin);
-	~DigitalOut();
 
 	DigitalOut(const DigitalOut&) = delete;
 	DigitalOut& operator=(const DigitalOut) = delete;

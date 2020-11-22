@@ -57,7 +57,6 @@ void vApplicationMallocFailedHook()
 
 _Noreturn void CcMain(void)
 {
-	NVIC_SetupVectorTable();
 	SemihostingInit();
 
 	mtk_os_hal_gpt_init();

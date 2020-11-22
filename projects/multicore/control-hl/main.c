@@ -9,10 +9,11 @@
 #include <applibs/application.h>
 #include <sys/time.h>
 #include <sys/socket.h>
+#include <mt3620.h>
 
 static const char RTAppCID[] = "4187B775-2AE9-4670-B151-1FA335D51398";
 
-static const GPIO_Id BUTTON_PIN = 12;
+static const GPIO_Id BUTTON_PIN = MT3620_GPIO38;
 
 int main(void)
 {

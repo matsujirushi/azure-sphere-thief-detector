@@ -7,6 +7,7 @@ class AnalogIn
 {
 private:
 	const adc_channel _Pin;
+	u32* _RxBuf;
 
 public:
 	AnalogIn(int pin);
@@ -17,12 +18,9 @@ public:
 
 	u32 Read()
 	{
-		if (mtk_os_hal_adc_start_ch(1 << _Pin) != 0) abort();
+		if (mtk_os_hal_adc_trigger_one_shot_once() != 0) abort();
 
-		u32 data;
-		if (mtk_os_hal_adc_one_shot_get_data(_Pin, &data) != 0) abort();
-
-		return data;
+		return _RxBuf[0];
 	}
 
 };

@@ -6,7 +6,7 @@
   "CmdArgs": [],
   "Capabilities": {
     "AllowedApplicationConnections": [ "4187B775-2AE9-4670-B151-1FA335D51398" ],
-    "Gpio": [ 12 ]
+    "Gpio": [ "$MT3620_GPIO12" ]
   },
   "ApplicationType": "Default"
 }

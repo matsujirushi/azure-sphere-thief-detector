@@ -1,16 +1,8 @@
 set(CMAKE_SYSTEM_NAME Generic)
 
-# Get sdk and cmake dir from environment set from toolchain location
-if(DEFINED AZURE_SPHERE_DEFAULT_CMAKE_PATH)
-    string(FIND ${AZURE_SPHERE_DEFAULT_CMAKE_PATH} "/" AZURE_SPHERE_DEFAULT_CMAKE_PATH_END REVERSE)
-    string(SUBSTRING ${AZURE_SPHERE_DEFAULT_CMAKE_PATH} 0 ${AZURE_SPHERE_DEFAULT_CMAKE_PATH_END} AZURE_SPHERE_CMAKE_PATH)
-    string(FIND ${AZURE_SPHERE_CMAKE_PATH} "/" AZURE_SPHERE_SDK_PATH_END REVERSE)
-    string(SUBSTRING ${AZURE_SPHERE_CMAKE_PATH} 0 ${AZURE_SPHERE_SDK_PATH_END} AZURE_SPHERE_SDK_PATH)
-    set(ENV{AzureSphereCMakePath} ${AZURE_SPHERE_CMAKE_PATH})
-    set(ENV{AzureSphereSDKPath} ${AZURE_SPHERE_SDK_PATH})
-endif()
-set(AZURE_SPHERE_CMAKE_PATH $ENV{AzureSphereCMakePath})
-set(AZURE_SPHERE_SDK_PATH $ENV{AzureSphereSDKPath} CACHE INTERNAL "Path to the Azure Sphere SDK")
+set(AS_INT_APP_TYPE "RTApp" CACHE INTERNAL "Type of application (\"HLApp\" or \"RTApp\")")
+set(AZURE_SPHERE_CMAKE_PATH "$ENV{AzureSphereDefaultSDKDir}CMakeFiles" CACHE INTERNAL "Path to the Azure Sphere SDK CMakeFiles")
+set(AZURE_SPHERE_SDK_PATH $ENV{AzureSphereDefaultSDKDir} CACHE INTERNAL "Path to the Azure Sphere SDK")
 
 include("${AZURE_SPHERE_CMAKE_PATH}/AzureSphereToolchainBase.cmake")
 
@@ -49,8 +41,8 @@ else()
     set(ENV{PATH} "${AZURE_SPHERE_SDK_PATH}/Tools:${ARM_GNU_BIN_PATH}:$ENV{PATH}")
 endif()
 
-set(CMAKE_C_FLAGS_INIT "-std=c11 -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wall")
-set(CMAKE_CXX_FLAGS_INIT "-std=gnu++14 -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wall")
+set(CMAKE_C_FLAGS_INIT "-std=c11 -fno-common -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wall")
+set(CMAKE_CXX_FLAGS_INIT "-std=gnu++14 -fno-common -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wall")
 set(CMAKE_EXE_LINKER_FLAGS_INIT "-nostartfiles -Wl,--no-undefined -Wl,-n -T \"${CMAKE_SOURCE_DIR}/linker.ld\" -fdata-sections -ffunction-sections -Wl,--gc-sections -Xlinker -Map=${PROJECT_NAME}.map")
 
 file(GLOB ARM_GNU_INCLUDE_PATH "${ARM_GNU_BASE_PATH}/lib/gcc/arm-none-eabi/*/include")

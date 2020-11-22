@@ -5,8 +5,8 @@
 #include <applibs/log.h>
 #include <applibs/adc.h>
 #include <applibs/gpio.h>
+#include <mt3620.h>
 
-#include "mt3620.h"
 #include "eventloop_timer_utilities.h"
 #include "queue.h"  // https://github.com/seifzadeh/c-pthread-queue
 

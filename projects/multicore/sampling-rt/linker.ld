@@ -35,21 +35,19 @@ SECTIONS
        When the code is run from XIP flash, it must be loaded to virtual address
        0x10000000 and be aligned to a 32-byte offset within the ELF file. */
     .text : ALIGN(32) {
+        __vector_table_start__ = .;
         KEEP(*(.vector_table))
+        __vector_table_end__ = .;
         *(.text)
     } >CODE_REGION
+
+    .isr_vector_tcm : ALIGN(512) {
+        KEEP(*(.vector_table_tcm))
+    } >DATA_REGION
 
     .rodata : {
         *(.rodata)
     } >RODATA_REGION
-
-    .data : {
-        *(.data)
-    } >DATA_REGION
-
-    .bss : {
-        *(.bss)
-    } >BSS_REGION
 
     .init_array : {
         PROVIDE_HIDDEN (__init_array_start = .);
@@ -58,13 +56,29 @@ SECTIONS
         PROVIDE_HIDDEN (__init_array_end = .);
     } >RODATA_REGION
 
-	.freertosheap : {
-		*(.freertosheap)
-	} >SYSRAM
+    .data : {
+        *(.data)
+    } >DATA_REGION
 
-    StackTop = ORIGIN(TCM) + LENGTH(TCM);
+    .bss : {
+        __bss_start__ = .;
+        *(.bss)
+        __bss_end__ = .;
+    } >BSS_REGION
 
     __exidx_start = .;
-    .ARM.exidx   : { *(.ARM.exidx* .gnu.linkonce.armexidx.*) } >BSS_REGION
+    .ARM.exidx : {
+        *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+    } >BSS_REGION
     __exidx_end = .;
+
+    . = ALIGN(4);
+    end = .;
+
+    .freertosheap : {
+        *(.freertosheap)
+    } >SYSRAM
+
+    StackTop = ORIGIN(TCM) + LENGTH(TCM);
 }
+

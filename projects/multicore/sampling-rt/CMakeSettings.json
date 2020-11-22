@@ -1,8 +1,7 @@
 {
   "environments": [
     {
-      "environment": "AzureSphere",
-      "BuildAllBuildsAllRoots": "true"
+      "environment": "AzureSphere"
     }
   ],
   "configurations": [
@@ -20,16 +19,8 @@
       "ctestCommandArgs": "",
       "variables": [
         {
-          "name": "AZURE_SPHERE_TARGET_API_SET",
-          "value": "latest-beta"
-        },
-        {
           "name": "ARM_GNU_PATH",
           "value": "${env.DefaultArmToolsetPath}"
-        },
-        {
-          "name": "AZURE_SPHERE_DEFAULT_CMAKE_PATH",
-          "value": "${env.AzureSphereDefaultSDKDir}CMakeFiles\\"
         }
       ]
     },
@@ -47,16 +38,8 @@
       "ctestCommandArgs": "",
       "variables": [
         {
-          "name": "AZURE_SPHERE_TARGET_API_SET",
-          "value": "latest-beta"
-        },
-        {
           "name": "ARM_GNU_PATH",
           "value": "${env.DefaultArmToolsetPath}"
-        },
-        {
-          "name": "AZURE_SPHERE_DEFAULT_CMAKE_PATH",
-          "value": "${env.AzureSphereDefaultSDKDir}CMakeFiles\\"
         }
       ]
     }
