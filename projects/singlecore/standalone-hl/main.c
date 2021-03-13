@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "applibs_versions.h"
 #include <applibs/log.h>
 #include <applibs/adc.h>
 #include <applibs/gpio.h>
